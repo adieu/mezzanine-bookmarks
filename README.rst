@@ -8,11 +8,11 @@ You could host it as a standalone bookmark service for multiple users. Or you co
 
 Here is the feature list:
 
- - Multiple User support
- - Single User mode
- - Use service from www.diffbot.com to extract main content from web page
- - Use service from api.zemanta.com to generate suggested tags
- - Store page content for future use
+- Multiple User support
+- Single User mode
+- Use service from www.diffbot.com to extract main content from web page
+- Use service from api.zemanta.com to generate suggested tags
+- Store page content for future use
 
 INSTALL
 *******
@@ -20,16 +20,16 @@ INSTALL
 EMBED INSTALL
 -------------
 
-mezzanine-bookmarks could be used as a django app.
+mezzanine-bookmarks could be used as a django app.::
 
 	pip install mezzanine-bookmarks
 
-Then add `'bookmarks',` to INSTALLED_APPS and add `("^bookmarks/", include("bookmarks.urls")),` to `urls.py`.
+Then add ``'bookmarks',`` to INSTALLED_APPS and add ``("^bookmarks/", include("bookmarks.urls")),`` to ``urls.py``.
 
 STANDALONE INSTALL
 ------------------
 
-mezzanine-bookmarks comes with a standalone mode which you could use run a bookmark service with it very quickly.
+mezzanine-bookmarks comes with a standalone mode which you could use run a bookmark service with it very quickly.::
 
 	virtualenv bookmarks
 	source bookmarks/bin/activate
