@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block meta_title %}Bookmarks{% endblock %}
+
+{% block title %}
+	{% trans "Add Bookmark" %}
+{% endblock title %}
+
+{% block main %}
+        
+    
+    <p>You can drag this '<a href="{{ bookmarklet }}">Add to {{ site_name }} Bookmarks</a>' link to your bookmark bar to post the pages you visit!</p>
+
+    <form method="post" action="" id="bookmark_instance_add_form">
+    	{% csrf_token %}
+        {{ bookmark_form }}
+        <p><input type="submit" class="btn btn-primary" value="{% trans 'Submit' %}"> <input id="extract-button" type="button" class="btn btn-primary" value="{% trans 'Extract' %}"> <input id="suggest-button" type="button" class="btn btn-primary" value="{% trans 'Suggest' %}"></p>
+    </form>
+ <div class="modal hide" id="status">
+  <div class="modal-header">
+    <h3>Analysing Destination Page</h3>
+  </div>
+  <div class="modal-body">
+    <p id="status_text">Extracting content...</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+$(document).ready(function() {
+	function on_tag_clicks(){
+		if ($("#id_keywords").val() == "") {
+			$("#id_keywords").val($(this).text());
+		} else {
+			$("#id_keywords").val($("#id_keywords").val() + ", " + $(this).text());
+		};
+	}
+
+	function extract(){
+		$("#status_text").text("Extracting content...");
+		$('#status').modal('show');
+		$.getJSON('/bookmarks/extract/', {'url':$("#id_url").val()}, function(data){
+			$("#id_title").val(data["title"]);
+			$("#id_content").val(data["html"]);
+			tinyMCE.get('id_content').setContent(data["html"]); 
+			$("#id_keywords").after("<div id='tags_extract'></div>");
+			$.each(data["tags"], function(index, value){
+				$("#tags_extract").append("<span class='label'>"+value+"</span> ");
+			})
+			$("#tags_extract span").each(function(){
+				$(this).click(on_tag_clicks);
+			})
+			suggest();
+		});
+	}
+
+	function suggest(){
+		$("#status_text").text("Querying suggest tags...");
+		$('#status').modal('show');
+		$.post('/bookmarks/suggest/', {'content':$("#id_content").val()}, function(data){
+			$("#id_keywords").after("<div id='tags_suggest' style='margin-bottom:2px'></div>");
+			$.each(data["keywords"], function(index, value){
+				$("#tags_suggest").append("<span class='label'>"+value["name"]+"</span> ");
+			})
+			$("#tags_suggest span").each(function(){
+				$(this).click(on_tag_clicks);
+			})
+			$('#status').modal('hide');
+		});
+	}
+
+
+	$("#extract-button").click(extract);
+	$("#suggest-button").click(suggest);
+	$("#status").modal({keyboard:false, show:false});
+	if ($("#id_url").val() != "" && $("#id_content").val() == "") {
+		extract();
+	};
+
+});
+</script>
+{% endblock %}

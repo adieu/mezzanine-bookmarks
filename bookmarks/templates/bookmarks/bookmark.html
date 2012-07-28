@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load i18n mezzanine_tags keyword_tags %}
+
+{% block meta_title %}{{ bookmark.title }} | Bookmarks{% endblock %}
+
+{% block content-block %}
+<div class="block">
+    <div class="block_head">
+        <h1>
+		    <a href="{{ bookmark.page.url|safe }}"><i class="icon-bookmark"></i> {{ bookmark.title }}</a>
+		</h1>
+    </div>
+    <div class="block_content">
+		{% if user.is_authenticated %}
+		{{ bookmark.content|safe }}
+		{% else %}
+		<p>You have to login to see the content of the page.</p>
+		{% endif %}
+    	<div class="post-meta">
+		{% keywords_for bookmark as tags %}
+		{% for tag in tags %}
+		<i class="icon-tag"></i> <a href="{% url tagged_bookmarks tag.slug %}">{{ tag }}</a>
+		{% endfor %}
+		</div>
+    </div>
+</div>
+
+{% endblock %}

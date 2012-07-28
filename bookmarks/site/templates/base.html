@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+{% load pages_tags mezzanine_tags i18n %}
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+	<meta name="description" content="{% block meta_description %}{% endblock %}">
+
+	{% block header-title %}<title>{% block meta_title %}{% endblock %}{% if settings.SITE_TITLE %} | {{ settings.SITE_TITLE }}{% endif %}</title>{% endblock header-title %}
+
+	{% ifinstalled mezzanine.blog %}
+	<link rel="alternate" type="application/rss+xml" title="RSS" href="{% url blog_post_feed "rss" %}">
+	<link rel="alternate" type="application/atom+xml" title="Atom" href="{% url blog_post_feed "atom" %}">
+	{% endifinstalled %}
+
+	{% compress css %}
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-fontawesome.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/mezzanine.css">
+	{% ifinstalled cartridge.shop %}
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/cartridge.css">
+	{% endifinstalled %}
+	<link rel="stylesheet" href="{{ STATIC_URL }}css/application.css">
+	{% block extra_css %}{% endblock %}
+	{% endcompress %}
+
+	{% compress js %}
+	<script src="{{ STATIC_URL }}mezzanine/js/{{ settings.JQUERY_FILENAME }}"></script>
+	<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+	<script>
+	$(function() {
+	    $('.middleinput:text, textarea').addClass('xlarge');
+	    $('.control-group label').addClass('control-label');
+	});
+	</script>
+	{% block extra_js %}{% endblock %}
+	{% endcompress %}
+	<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+	{% block extra_head %}{% endblock %}
+  </head>
+
+  <body class="{% block body-class %}template-normal{% endblock body-class %}">
+    {% block wrapper %}
+    {% block content-wrapper %}
+    <div class="{% block content-container-class %}container{% endblock content-container-class %}">
+        <div class="sitename">{{ settings.SITE_TITLE }}</div>
+<div class="subnav">
+		{% page_menu "pages/menus/dropdown.html" %}
+		</div>
+        {% block content-message %}
+	      {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                <a class="close" data-dismiss="alert">×</a>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        {% endblock content-message %}
+        {% block content-block %}
+        <div class="block">
+            <div class="block_head">
+                <h1>{% block title %}{% endblock %}</h1>
+            </div>
+            <div class="block_content">
+                {% block main %}{% endblock %}
+            </div>
+        </div>
+        {% endblock content-block %}
+    </div> <!-- /container -->
+    {% block extra-content-block %}{% endblock extra-content-block %}
+    {% endblock content-wrapper %}
+    {% block footer-wrapper %}
+    <footer class="footer">
+        <div class="container">{% block footer %}© Copyright 2012 The Bookmark Service, All rights reserved.{% endblock footer %}</div>
+		<div>Powered by <a href="http://www.python.org/">Python</a>, <a href="https://www.djangoproject.com">Django</a>, <a href="http://mezzanine.jupo.org/">Messanine</a> and <a href="http://twitter.github.com/bootstrap/">Bootstrap</a></div>
+    </footer>
+    {% endblock footer-wrapper %}
+    {% endblock wrapper %}
+
+	{% include "includes/footer_scripts.html" %}
+  </body>
+</html>
