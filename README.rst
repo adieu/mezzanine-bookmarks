@@ -20,7 +20,7 @@ INSTALL
 EMBED INSTALL
 -------------
 
-mezzanine-bookmarks could be used as a django app.:
+mezzanine-bookmarks could be used as a django app::
 
 	pip install mezzanine-bookmarks
 
@@ -29,7 +29,7 @@ Then add ``'bookmarks',`` to INSTALLED_APPS and add ``("^bookmarks/", include("b
 STANDALONE INSTALL
 ------------------
 
-mezzanine-bookmarks comes with a standalone mode which you could use run a bookmark service with it very quickly.:
+mezzanine-bookmarks comes with a standalone mode which you could use run a bookmark service with it very quickly::
 
 	virtualenv bookmarks
 	source bookmarks/bin/activate
