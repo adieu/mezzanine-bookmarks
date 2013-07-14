@@ -50,7 +50,7 @@ def bookmarks(request, slug=None, username=None):
     return render(request, ["bookmarks/bookmarks.html"], {
         "bookmarks": bookmarks,
         "tag": keyword,
-        "user": user,
+        "username": user,
     })
 
 
