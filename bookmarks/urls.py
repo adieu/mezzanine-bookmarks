@@ -8,4 +8,6 @@ urlpatterns = patterns("",
     url(r"^extract/$", "bookmarks.views.extract", name="extract_content"),
     url(r"^suggest/$", "bookmarks.views.suggest", name="suggest_content"),
     url(r"^tags/(?P<slug>[-\w]+)/$", "bookmarks.views.bookmarks", name="tagged_bookmarks"),
+    url(r"^user/(?P<username>[-\w]+)/$", "bookmarks.views.bookmarks", name="tagged_bookmarks"),
+    url(r"^user/(?P<username>[-\w]+)/tags/(?P<slug>[-\w]+)$", "bookmarks.views.bookmarks", name="tagged_bookmarks"),
 )

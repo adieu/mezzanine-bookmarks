@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.utils.encoding import smart_str
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 from mezzanine.utils.views import render, paginate
 from mezzanine.conf import settings
@@ -19,19 +20,26 @@ from bookmarks.forms import BookmarkForm
 from bookmarks.models import Bookmark
 
 
-def bookmarks(request, slug=None):
-    if not slug:
-        bookmarks = Bookmark.objects.all().order_by("-publish_date")
-        keyword = None
-    else:
+def bookmarks(request, slug=None, username=None):
+    bookmarks = Bookmark.objects.all().order_by("-publish_date")
+    keyword = None
+    user = None
+
+    if slug:
         try:
             keyword = Keyword.objects.get(slug=slug)
         except Keyword.DoesNotExist:
             raise Http404
 
-        bookmarks = Bookmark.objects.filter(keywords__keyword_id=keyword.pk).order_by("-publish_date")
-        if len(bookmarks) == 0:
+        bookmarks = bookmarks.filter(keywords__keyword_id=keyword.pk)
+
+    if username:
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
             raise Http404
+
+        bookmarks = bookmarks.filter(user__username=username)
 
     bookmarks = paginate(
         bookmarks,
@@ -42,6 +50,7 @@ def bookmarks(request, slug=None):
     return render(request, ["bookmarks/bookmarks.html"], {
         "bookmarks": bookmarks,
         "tag": keyword,
+        "user": user,
     })
 
 
