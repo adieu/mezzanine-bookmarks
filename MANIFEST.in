@@ -1,4 +1,4 @@
 include setup.py MANIFEST.in README.rst
 recursive-include bookmarks/templates *
 recursive-include bookmarks/site/templates *
-recursive-include bokkmarks/site/static *
+recursive-include bookmarks/site/static *
